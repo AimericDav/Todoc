@@ -1,5 +1,7 @@
 package com.cleanup.todoc.ui;
 
+import android.arch.lifecycle.ViewModelProvider;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.DialogInterface;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,12 +20,15 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.cleanup.todoc.R;
+import com.cleanup.todoc.injections.Injection;
+import com.cleanup.todoc.injections.ViewModelFactory;
 import com.cleanup.todoc.model.Project;
 import com.cleanup.todoc.model.Task;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>Home activity of the application which is displayed when the user opens the app.</p>
@@ -32,6 +37,8 @@ import java.util.Date;
  * @author Gaëtan HERFRAY
  */
 public class MainActivity extends AppCompatActivity implements TasksAdapter.DeleteTaskListener {
+
+    private TodocViewModel mTodocViewModel;
     /**
      * List of all projects available in the application
      */
@@ -99,6 +106,8 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
 
         listTasks.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         listTasks.setAdapter(adapter);
+
+        getTask();
 
         findViewById(R.id.fab_add_task).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -208,7 +217,7 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
      * @param task the task to be added to the list
      */
     private void addTask(@NonNull Task task) {
-        tasks.add(task);
+        insertTask(task);
         updateTasks();
     }
 
@@ -282,6 +291,23 @@ public class MainActivity extends AppCompatActivity implements TasksAdapter.Dele
         });
 
         return dialog;
+    }
+
+    private void configureViewModel() {
+        ViewModelFactory modelFactory = Injection.provideViewModelFactory(this);
+        this.mTodocViewModel = ViewModelProviders.of(this, modelFactory).get(TodocViewModel.class);
+    }
+
+    private void getTask() {
+        this.mTodocViewModel.getAllTasks().observe(this, this::updateTaskList);
+    }
+
+    private void updateTaskList(List<Task> tasks) {
+        this.adapter.updateTasks(tasks);
+    }
+
+    private void insertTask(Task task) {
+        this.mTodocViewModel.insertTask(task);
     }
 
     /**

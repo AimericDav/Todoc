@@ -1,5 +1,8 @@
 package com.cleanup.todoc.model;
 
+import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.ForeignKey;
+import android.arch.persistence.room.PrimaryKey;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -10,10 +13,12 @@ import java.util.Comparator;
  *
  * @author Gaëtan HERFRAY
  */
+@Entity
 public class Task {
     /**
      * The unique identifier of the task
      */
+    @PrimaryKey(autoGenerate = true)
     private long id;
 
     /**
@@ -76,6 +81,10 @@ public class Task {
         this.projectId = projectId;
     }
 
+    public long getProjectId() {
+        return projectId;
+    }
+
     /**
      * Returns the project associated to the task.
      *
@@ -112,6 +121,10 @@ public class Task {
      */
     private void setCreationTimestamp(long creationTimestamp) {
         this.creationTimestamp = creationTimestamp;
+    }
+
+    public long getCreationTimestamp() {
+        return creationTimestamp;
     }
 
     /**
