@@ -42,7 +42,7 @@ public class TodocViewModel extends ViewModel {
     }
 
     // Project
-    public List<Project> getAllProject() {
+    public LiveData<List<Project>> getAllProject() {
         return projectDataSource.getAllProject();
     }
 
