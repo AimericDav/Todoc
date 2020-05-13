@@ -53,13 +53,14 @@ public abstract class TodocMasterDatabase extends RoomDatabase {
                 Projet_Lucidia.put("color", 0xFFB4CDBA);
 
                 ContentValues Projet_Circus = new ContentValues();
-                Projet_Circus.put("id", 2L);
+                Projet_Circus.put("id", 3L);
                 Projet_Circus.put("name", "Projet Circus");
                 Projet_Circus.put("color", 0xFFA3CED2);
 
                 db.insert("Project", OnConflictStrategy.IGNORE, Projet_Tartampion);
-                db.insert("Project", OnConflictStrategy.IGNORE, Projet_Circus);
                 db.insert("Project", OnConflictStrategy.IGNORE, Projet_Lucidia);
+                db.insert("Project", OnConflictStrategy.IGNORE, Projet_Circus);
+
 
             }
         };
