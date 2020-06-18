@@ -1,6 +1,7 @@
 package com.cleanup.todoc;
 
 import android.arch.core.executor.testing.InstantTaskExecutorRule;
+import android.arch.lifecycle.LiveData;
 import android.arch.persistence.room.Room;
 import android.support.test.InstrumentationRegistry;
 import android.support.test.runner.AndroidJUnit4;
@@ -15,10 +16,12 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import java.util.List;
+
 import static org.junit.Assert.assertEquals;
 
 @RunWith(AndroidJUnit4.class)
-public class TaskDaoTest {
+public class DatabaseDaoTest {
 
     // For data
     private TodocMasterDatabase mDatabase;
@@ -26,7 +29,7 @@ public class TaskDaoTest {
     // DATA for TEST
     private Project PROJECT_TARTAMPION = new Project(1L, "Projet Tartampion", 0xFFEADAD1);
     private Project PROJECT_LUCIDIA = new Project(2L, "Projet Lucidia", 0xFFB4CDBA);
-    private Task TASK_DEMO = new Task(1,1L,"TEST",0);
+    private Task TASK_DEMO = new Task(1L,"TEST",0);
 
     @Rule
     public InstantTaskExecutorRule mInstantTaskExecutorRule = new InstantTaskExecutorRule();
@@ -64,8 +67,9 @@ public class TaskDaoTest {
     public void insertAndDelete() throws InterruptedException {
         assertEquals(0, LiveDataTestUtil.getValue(this.mDatabase.mTaskDao().getTasks()).size());
         this.mDatabase.mTaskDao().insertTask(TASK_DEMO);
+        List<Task> tasks = LiveDataTestUtil.getValue(this.mDatabase.mTaskDao().getTasks());
         assertEquals(1, LiveDataTestUtil.getValue(this.mDatabase.mTaskDao().getTasks()).size());
-        this.mDatabase.mTaskDao().deleteTask(TASK_DEMO.getId());
+        this.mDatabase.mTaskDao().deleteTask(tasks.get(0));
         assertEquals(0, LiveDataTestUtil.getValue(this.mDatabase.mTaskDao().getTasks()).size());
     }
 

@@ -35,9 +35,9 @@ public class TodocViewModel extends ViewModel {
         });
     }
 
-    public void deleteTask(long id) {
+    public void deleteTask(Task task) {
         mExecutor.execute(() -> {
-            taskDataSource.deleteTask(id);
+            taskDataSource.deleteTask(task);
         });
     }
 
